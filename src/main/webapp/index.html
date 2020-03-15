@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>vue主页</title>
+    <script src="/js/vue.js"></script>
+    <script src="/js/axios.min.js"></script>
+</head>
+
+<body>
+<div id="all">
+    <button v-on:click="queryAll" style="left: auto;right: 50px">查询所有</button>
+    <button v-on:click="exportUser">导出</button>
+    <br>
+    <table v-if="result">
+        <tr>
+            <td>姓名</td>
+            <td>手机号码</td>
+        </tr>
+        <tr v-for="user in users">
+            <td>{{user.username}}</td>
+            <td>{{user.phone}}</td>
+        </tr>
+    </table>
+</div>
+<br>
+<div id="tid">
+    <input v-model="tid" type="text">
+    <br>
+    <button v-on:click="queryID('tid')">查询{{tid}}号用户</button>
+    <p>{{tid}}号用户信息</p>
+</div>
+<script type="text/javascript">
+    new Vue({
+        el: '#all',
+        data(){
+
+            return{
+                result:false,
+                users:null
+            }
+        },
+        methods:{
+            queryAll:function(){
+                var _this=this;
+                axios.get('/user/all')
+                .then(function(response){
+                    _this.users=response.data;
+                    if (_this.users){
+                        _this.result=true;
+                    }
+                });
+
+            },
+            exportUser:function () {
+                window.open("/user/export");
+                //window2.close();
+            }
+
+        }
+    });
+    new Vue({
+        el: '#tid',
+        data(){
+            return{
+                tid:1,
+                result:false,
+                user:null
+            }
+        },
+        mounted() {
+
+        }
+    })
+</script>
+</body>
+</html>
